@@ -2,51 +2,55 @@ let money = 1000000;
 let popularity = 50;
 
 function updateStats() {
-  document.getElementById("money").innerText = money;
-  document.getElementById("popularity").innerText = popularity;
+  console.log("Updating stats", money, popularity);
+  document.getElementById("money").textContent = money;
+  document.getElementById("popularity").textContent = popularity;
 }
 
 function startRace() {
-  document.getElementById("output").innerText =
-    "🏁 Race simulated. Results hidden. Steward review pending.";
+  console.log("Start race clicked");
+  document.getElementById("output").textContent =
+    "🏁 Race simulated. Results hidden.";
 }
 
 function runAds() {
-  if (money >= 100000) {
-    money -= 100000;
-    popularity += 5;
-    document.getElementById("output").innerText =
-      "📺 Ads ran. New fans discovered Supercross!";
-    updateStats();
-  }
-}
-
-function hostEvent() {
-  if (money >= 200000) {
-    money -= 200000;
-    popularity += 8;
-    document.getElementById("output").innerText =
-      "🎉 Special event boosted popularity!";
-    updateStats();
-  }
-}
-
-function improveSafety() {
-  if (money >= 150000) {
-    money -= 150000;
-    popularity += 3;
-    document.getElementById("output").innerText =
-      "🦺 Safety improved. League credibility rises.";
-    updateStats();
-  }
-}
-
-function allowDrama() {
-  popularity += 2;
-  document.getElementById("output").innerText =
-    "🔥 Drama allowed. Social media explodes!";
+  console.log("Run ads clicked");
+  money -= 100000;
+  popularity += 5;
+  document.getElementById("output").textContent =
+    "📺 Ads ran. Popularity increased.";
   updateStats();
 }
 
-window.onload = updateStats;
+function hostEvent() {
+  console.log("Host event clicked");
+  money -= 200000;
+  popularity += 8;
+  document.getElementById("output").textContent =
+    "🎉 Special event held.";
+  updateStats();
+}
+
+function improveSafety() {
+  console.log("Improve safety clicked");
+  money -= 150000;
+  popularity += 3;
+  document.getElementById("output").textContent =
+    "🦺 Safety improved.";
+  updateStats();
+}
+
+function allowDrama() {
+  console.log("Allow drama clicked");
+  popularity += 2;
+  document.getElementById("output").textContent =
+    "🔥 Drama allowed.";
+  updateStats();
+}
+
+window.onload = function () {
+  console.log("Page loaded");
+  updateStats();
+};
+
 
