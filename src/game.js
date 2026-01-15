@@ -1,56 +1,81 @@
 let money = 1000000;
 let popularity = 50;
 
+function rand(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function updateStats() {
-  console.log("Updating stats", money, popularity);
   document.getElementById("money").textContent = money;
   document.getElementById("popularity").textContent = popularity;
 }
 
+/* RACE */
 function startRace() {
-  console.log("Start race clicked");
-  document.getElementById("output").textContent =
-    "🏁 Race simulated. Results hidden.";
+  const incidents = [
+    "Aggressive pass causes controversy",
+    "Track conditions questioned",
+    "Rider penalized for jumping on red cross",
+    "Fans angry over no penalty",
+    "Clean race, great battles"
+  ];
+
+  const result = incidents[rand(0, incidents.length - 1)];
+
+  document.getElementById("raceText").innerHTML = `
+    Incident: <b>${result}</b><br><br>
+    Choose penalties next (coming soon).
+  `;
+
+  document.getElementById("raceModal").style.display = "flex";
 }
 
+function closeRace() {
+  document.getElementById("raceModal").style.display = "none";
+}
+
+/* LEAGUE ACTIONS */
 function runAds() {
-  console.log("Run ads clicked");
   money -= 100000;
-  popularity += 5;
+  popularity += rand(3, 7);
   document.getElementById("output").textContent =
-    "📺 Ads ran. Popularity increased.";
+    "📺 Ads launched. Fan interest changes.";
   updateStats();
 }
 
 function hostEvent() {
-  console.log("Host event clicked");
   money -= 200000;
-  popularity += 8;
+  popularity += rand(5, 10);
   document.getElementById("output").textContent =
-    "🎉 Special event held.";
+    "🎉 Special event held. Media buzz!";
   updateStats();
 }
 
 function improveSafety() {
-  console.log("Improve safety clicked");
   money -= 150000;
-  popularity += 3;
+  popularity += rand(1, 4);
   document.getElementById("output").textContent =
-    "🦺 Safety improved.";
+    "🦺 Safety investment made. Riders approve.";
   updateStats();
 }
 
 function allowDrama() {
-  console.log("Allow drama clicked");
-  popularity += 2;
+  popularity += rand(-2, 6);
   document.getElementById("output").textContent =
-    "🔥 Drama allowed.";
+    "🔥 Drama allowed. Fans react unpredictably.";
   updateStats();
 }
 
-window.onload = function () {
-  console.log("Page loaded");
+function signSponsor() {
+  const payout = rand(100000, 400000);
+  money += payout;
+  popularity += rand(-1, 3);
+  document.getElementById("output").textContent =
+    `🤝 Sponsor signed! +$${payout.toLocaleString()}`;
   updateStats();
-};
+}
+
+window.onload = updateStats;
+
 
 
