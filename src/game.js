@@ -1,96 +1,62 @@
-// ---------------------- CORE STATS ----------------------
-let money = 1000000;
-let popularity = 50;
-let maxSeats = 1000;
+let money = 1500000;
+let popularity = 40;
+let maxSeats = 20000;
 let seatsFilled = 0;
-let ticketPrice = 50;
-let seasonPoints = 0;
 
-// ---------------------- SPONSORS ----------------------
-let currentSponsor = null;
-const sponsors = [
-  { name: "Monster Energy", payoutBase: 100000, duration: 3, minPopularity: 0 },
-  { name: "Red Bull", payoutBase: 120000, duration: 3, minPopularity: 40 },
-  { name: "GoPro", payoutBase: 80000, duration: 3, minPopularity: 20 },
-  { name: "Yamaha", payoutBase: 200000, duration: 4, minPopularity: 70 },
-  { name: "KTM", payoutBase: 180000, duration: 4, minPopularity: 60 }
-];
+let pointsSystem = null;
+let setupSpent = {};
+const championship = {};
 
-// ---------------------- RIDERS ----------------------
-let riders = [
-  { name: "Rider A", skill: 80, stamina: 100, popularity: 50 },
-  { name: "Rider B", skill: 75, stamina: 90, popularity: 40 },
-  { name: "Rider C", skill: 70, stamina: 85, popularity: 30 },
-  { name: "Your Rider", skill: 78, stamina: 95, popularity: 50 }
-];
+function updateUI() {
+  money = Math.max(0, money);
+  popularity = Math.min(100, Math.max(0, popularity));
 
-// ---------------------- UTILS ----------------------
-function outputText(txt) {
-  document.getElementById("output").textContent = txt;
-}
-
-function updateStats() {
   document.getElementById("money").textContent = money;
   document.getElementById("popularity").textContent = popularity;
+  document.getElementById("maxSeats").textContent = maxSeats;
   document.getElementById("seatsFilled").textContent = seatsFilled;
-  document.getElementById("seasonPoints").textContent = seasonPoints;
-
-  if(currentSponsor) {
-    document.getElementById("sponsorOutput").textContent =
-      `Current Sponsor: ${currentSponsor.name} | ` +
-      `Payout: $${currentSponsor.payoutBase.toLocaleString()} per race | ` +
-      `Races left: ${currentSponsor.remainingRaces}`;
-  } else {
-    document.getElementById("sponsorOutput").textContent = "No active sponsor";
-  }
 }
 
-// ---------------------- LEAGUE ACTIONS ----------------------
-function runAds() { money -= 100000; popularity += Math.floor(Math.random()*5)+3; outputText("📺 Ads run. Fans react!"); updateStats(); }
-function hostEvent() { money -= 200000; popularity += Math.floor(Math.random()*6)+5; outputText("🎉 Special event held. Popularity rises!"); updateStats(); }
-function improveSafety() { money -= 150000; popularity += Math.floor(Math.random()*4)+1; outputText("🦺 Safety improved. Fans and riders approve."); updateStats(); }
-function allowDrama() { popularity += Math.floor(Math.random()*9)-2; outputText("🔥 Drama allowed. Fans react unpredictably."); updateStats(); }
-function trainRiders() {
-  money -= 50000;
-  riders.forEach(r => r.skill += Math.floor(Math.random()*3)+1);
-  outputText("💪 Riders trained. Skills increased slightly!");
-  updateStats();
+function output(msg) {
+  document.getElementById("output").textContent = msg;
 }
 
-// ---------------------- SPONSORS ----------------------
-function showSponsorChoices() {
-  if(currentSponsor) {
-    outputText(`❌ Already have a sponsor: ${currentSponsor.name}`);
-    return;
-  }
-
-  const sponsorDiv = document.getElementById("penaltyOptions");
-  sponsorDiv.innerHTML = "<h3>Choose a Sponsor</h3>";
-
-  sponsors.forEach((s) => {
-    if(popularity >= s.minPopularity) {
-      const btn = document.createElement("button");
-      btn.textContent = `${s.name} — $${s.payoutBase} per race`;
-      btn.onclick = () => {
-        currentSponsor = {...s};
-        currentSponsor.remainingRaces = s.duration;
-        outputText(`🤝 You signed ${s.name}! Pays $${s.payoutBase} per race for ${s.duration} races.`);
-        sponsorDiv.innerHTML = "";
-        updateStats();
-      };
-      sponsorDiv.appendChild(btn);
-    }
-  });
+function selectPointsSystem(sys) {
+  if (pointsSystem) return alert("Points system locked for season.");
+  pointsSystem = sys;
 }
 
-// ---------------------- STADIUM ----------------------
-function upgradeStadium() {
-  const cost = maxSeats*5;
-  if(money >= cost) { money -= cost; maxSeats += 500; outputText(`🏟 Stadium upgraded! Max seats now ${maxSeats}`); updateStats(); }
-  else { outputText("❌ Not enough money for stadium upgrade!"); }
+function setupSpend(type) {
+  if (setupSpent[type]) return;
+  money -= 300000;
+  popularity += 5;
+  setupSpent[type] = true;
+  updateUI();
 }
 
-window.onload = updateStats;
+function finishSetup() {
+  if (!pointsSystem) return alert("Choose points system!");
+  document.getElementById("setupPanel").style.display = "none";
+  document.getElementById("gamePanel").style.display = "block";
+  updateUI();
+}
+
+function showStandings() {
+  let list = Object.entries(championship).sort((a,b)=>b[1]-a[1]);
+  let text = "🏆 Championship Standings\n\n";
+  list.forEach((r,i)=>text+=`${i+1}. ${r[0]} — ${r[1]} pts\n`);
+  alert(text || "No races yet.");
+}
+
+function startNewSeason() {
+  if (!confirm("Start new season?")) return;
+  for (let d in championship) championship[d] = 0;
+  pointsSystem = null;
+  setupSpent = {};
+  document.getElementById("gamePanel").style.display="none";
+  document.getElementById("setupPanel").style.display="block";
+}
+
 
 
 
