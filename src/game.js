@@ -4,6 +4,7 @@ let popularity = 50;
 let maxSeats = 1000;
 let seatsFilled = 0;
 let ticketPrice = 50;
+let seasonPoints = 0;
 
 // ---------------------- SPONSORS ----------------------
 let currentSponsor = null;
@@ -15,6 +16,14 @@ const sponsors = [
   { name: "KTM", payoutBase: 180000, duration: 4, minPopularity: 60 }
 ];
 
+// ---------------------- RIDERS ----------------------
+let riders = [
+  { name: "Rider A", skill: 80, stamina: 100, popularity: 50 },
+  { name: "Rider B", skill: 75, stamina: 90, popularity: 40 },
+  { name: "Rider C", skill: 70, stamina: 85, popularity: 30 },
+  { name: "Your Rider", skill: 78, stamina: 95, popularity: 50 }
+];
+
 // ---------------------- UTILS ----------------------
 function outputText(txt) {
   document.getElementById("output").textContent = txt;
@@ -24,7 +33,8 @@ function updateStats() {
   document.getElementById("money").textContent = money;
   document.getElementById("popularity").textContent = popularity;
   document.getElementById("seatsFilled").textContent = seatsFilled;
-  
+  document.getElementById("seasonPoints").textContent = seasonPoints;
+
   if(currentSponsor) {
     document.getElementById("sponsorOutput").textContent =
       `Current Sponsor: ${currentSponsor.name} | ` +
@@ -40,8 +50,14 @@ function runAds() { money -= 100000; popularity += Math.floor(Math.random()*5)+3
 function hostEvent() { money -= 200000; popularity += Math.floor(Math.random()*6)+5; outputText("🎉 Special event held. Popularity rises!"); updateStats(); }
 function improveSafety() { money -= 150000; popularity += Math.floor(Math.random()*4)+1; outputText("🦺 Safety improved. Fans and riders approve."); updateStats(); }
 function allowDrama() { popularity += Math.floor(Math.random()*9)-2; outputText("🔥 Drama allowed. Fans react unpredictably."); updateStats(); }
+function trainRiders() {
+  money -= 50000;
+  riders.forEach(r => r.skill += Math.floor(Math.random()*3)+1);
+  outputText("💪 Riders trained. Skills increased slightly!");
+  updateStats();
+}
 
-// ---------------------- SPONSORS CHOICE ----------------------
+// ---------------------- SPONSORS ----------------------
 function showSponsorChoices() {
   if(currentSponsor) {
     outputText(`❌ Already have a sponsor: ${currentSponsor.name}`);
@@ -75,6 +91,7 @@ function upgradeStadium() {
 }
 
 window.onload = updateStats;
+
 
 
 
