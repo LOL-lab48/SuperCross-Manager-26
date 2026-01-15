@@ -7,54 +7,62 @@
 </head>
 <body>
 
-  <h1>🏁 SuperCross Manager 26</h1>
+<h1>🏁 SuperCross Manager 26</h1>
 
-  <!-- Stats Panel -->
+<!-- SETUP -->
+<div class="panel" id="setupPanel">
+  <h2>League Setup</h2>
+
+  <p><b>Choose Points System (Locked for Season)</b></p>
+  <button onclick="selectPointsSystem('A')">System A (25-22-20)</button>
+  <button onclick="selectPointsSystem('B')">System B (20-17-15)</button>
+
+  <p><b>Pre-Season Investment</b></p>
+  <button onclick="setupSpend('marketing')">Marketing ($300k)</button>
+  <button onclick="setupSpend('safety')">Safety ($300k)</button>
+  <button onclick="setupSpend('media')">Media ($300k)</button>
+
+  <br><br>
+  <button onclick="finishSetup()">START SEASON</button>
+</div>
+
+<!-- GAME -->
+<div id="gamePanel" style="display:none">
+
   <div class="panel stats">
-    <h2>League Stats</h2>
-    💰 Money: $<span id="money">1000000</span><br>
-    📣 Popularity: <span id="popularity">50</span>%<br>
-    🏟 Seats filled: <span id="seatsFilled">0</span>/<span id="maxSeats">1000</span><br>
-    🏆 Season Points: <span id="seasonPoints">0</span>
+    💰 Money: $<span id="money"></span><br>
+    📣 Popularity: <span id="popularity"></span>%<br>
+    🏟 Seats: <span id="seatsFilled"></span>/<span id="maxSeats"></span>
   </div>
 
-  <!-- Actions Panel -->
   <div class="panel actions">
-    <h2>League Actions</h2>
     <button onclick="startRace()">🏁 Simulate Race</button>
-    <button onclick="runAds()">📺 Run Ads</button>
-    <button onclick="hostEvent()">🎉 Host Event</button>
-    <button onclick="improveSafety()">🦺 Improve Safety</button>
-    <button onclick="allowDrama()">🔥 Encourage Drama</button>
-    <button onclick="showSponsorChoices()">🤝 Choose Sponsor</button>
-    <button onclick="upgradeStadium()">⬆ Upgrade Stadium</button>
-    <button onclick="trainRiders()">💪 Train Riders</button>
+    <button onclick="showStandings()">🏆 Championship Standings</button>
+    <button onclick="startNewSeason()">🔄 New Season</button>
   </div>
 
-  <!-- Output Panel -->
   <div class="panel output">
-    <h2>League Output</h2>
-    <div id="output">Waiting for decision...</div>
-    <div id="sponsorOutput">No active sponsor</div>
+    <div id="output">Waiting for race...</div>
   </div>
 
-  <!-- Race Modal -->
-  <div id="raceModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeRace()">X</span>
-      <h2>Post-Race Review</h2>
-      <div id="raceText"></div>
-      <div id="penaltyOptions"></div>
-    </div>
-  </div>
+</div>
 
-  <!-- Scripts -->
-  <!-- Load raceSim first, then game.js -->
-  <script src="src/raceSim.js"></script>
-  <script src="src/game.js"></script>
+<!-- MODAL -->
+<div id="raceModal" class="modal">
+  <div class="modal-content">
+    <h2>Race Control</h2>
+    <div id="raceText"></div>
+    <div id="penaltyOptions"></div>
+  </div>
+</div>
+
+<script src="src/data/riders.js"></script>
+<script src="src/raceSim.js"></script>
+<script src="src/game.js"></script>
 
 </body>
 </html>
+
 
 
 
