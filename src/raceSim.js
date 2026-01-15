@@ -1,97 +1,89 @@
+const dnfReasons = [
+  "Crash","Mechanical failure","Injury",
+  "Bike fire","Black flag","Weather damage"
+];
+
+const headlines = [
+  "Fans debate race control decisions",
+  "Social media explodes after controversy",
+  "Promoter under pressure after ruling",
+  "Race hailed as instant classic",
+  "Safety concerns raised by teams"
+];
+
 function startRace() {
-  // Calculate tickets
-  seatsFilled = Math.min(maxSeats, Math.floor((popularity/100)*maxSeats));
-  const ticketRevenue = seatsFilled * ticketPrice;
+  seatsFilled = Math.floor(maxSeats * (popularity/100));
+  let results = [];
 
-  // Sponsor revenue
-  let sponsorRevenue = 0;
-  if(currentSponsor) {
-    sponsorRevenue = currentSponsor.payoutBase + Math.floor(popularity*100);
-    currentSponsor.remainingRaces--;
-    if(currentSponsor.remainingRaces <= 0) {
-      outputText(`${currentSponsor.name} sponsorship ended!`);
-      currentSponsor = null;
-    }
+  drivers.forEach(name=>{
+    if (Math.random()<0.15)
+      results.push({name,dnf:true,reason:rand(dnfReasons)});
+    else
+      results.push({name,score:Math.random()});
+  });
+
+  results.sort((a,b)=>(b.score||-1)-(a.score||-1));
+
+  const clean = Math.random()<0.4;
+  if (clean) {
+    applyResults(results);
+    showResults(results,"✅ Clean race. Fans loved it.");
+  } else {
+    showPenaltyOptions(results);
   }
-
-  // Generate race positions
-  const racePositions = simulateRace();
-  const incident = pickIncident();
-
-  document.getElementById("raceText").innerHTML = `
-    <b>Incident:</b> ${incident}<br>
-    Race positions hidden until penalty is applied.<br>
-    Tickets sold: ${seatsFilled}/${maxSeats}<br>
-    Race revenue pending penalty.
-  `;
-
-  generatePenalties(incident, racePositions, ticketRevenue, sponsorRevenue);
-
-  document.getElementById("raceModal").style.display = "flex";
-  updateStats();
 }
 
-function closeRace() {
-  document.getElementById("raceModal").style.display = "none";
-}
+function showPenaltyOptions(results) {
+  const modal=document.getElementById("raceModal");
+  const text=document.getElementById("raceText");
+  const opts=document.getElementById("penaltyOptions");
 
-// ---------------------- SIMULATION HELPERS ----------------------
-function simulateRace() {
-  // Shuffle riders by skill + random
-  const ridersCopy = [...riders];
-  ridersCopy.forEach(r => r.tempScore = r.skill + Math.random()*20);
-  ridersCopy.sort((a,b) => b.tempScore - a.tempScore);
-  return ridersCopy;
-}
+  text.textContent="⚠ Incident under review. Choose response.";
+  opts.innerHTML="";
 
-function pickIncident() {
-  const incidents = [
-    "Rider jumped the red cross",
-    "Aggressive pass caused controversy",
-    "Track conditions questioned",
-    "Fans angry over no penalty",
-    "Clean race, great battles"
-  ];
-  return incidents[Math.floor(Math.random()*incidents.length)];
-}
-
-// ---------------------- PENALTIES ----------------------
-function generatePenalties(incident, racePositions, ticketRevenue, sponsorRevenue) {
-  const optionsDiv = document.getElementById("penaltyOptions");
-  optionsDiv.innerHTML = "<h3>Penalty Options</h3>";
-
-  const penalties = [
-    { text: "No Penalty", pop: -5, money: 0, feedback: "Fans upset!" },
-    { text: "Warning", pop: 3, money: 0, feedback: "Correct choice! Fans approve." },
-    { text: "Small Fine", pop: -2, money: -5000, feedback: "Minor backlash." },
-    { text: "Disqualification", pop: -10, money: 0, feedback: "Overreaction! Fans unhappy." }
-  ];
-
-  penalties.forEach((p) => {
-    const btn = document.createElement("button");
-    btn.textContent = p.text;
-    btn.onclick = () => {
-      popularity += p.pop;
-      money += p.money || 0;
-
-      if(currentSponsor) money += sponsorRevenue;
-
-      // Reveal race results after penalty
-      let resultText = "🏆 Race Results:\n";
-      racePositions.forEach((rider, index) => {
-        resultText += `${index+1}. ${rider.name}\n`;
-        if(rider.name === "Your Rider") seasonPoints += Math.max(0, 10 - index); // points reward
-      });
-
-      resultText += `\nTicket revenue: $${ticketRevenue}\nSponsor revenue: $${sponsorRevenue}`;
-
-      document.getElementById("raceText").innerText =
-        `Penalty applied: ${p.text} → ${p.feedback}\n\n` + resultText;
-
-      // Close modal after 6 seconds
-      setTimeout(closeRace, 6000);
-      updateStats();
+  [
+    {t:"Correct Call",p:+3},
+    {t:"Too Soft",p:-5},
+    {t:"Too Harsh",p:-8}
+  ].forEach(c=>{
+    const b=document.createElement("button");
+    b.textContent=c.t;
+    b.onclick=()=>{
+      popularity+=c.p;
+      applyResults(results);
+      showResults(results,`Decision: ${c.t}`);
     };
-    optionsDiv.appendChild(btn);
+    opts.appendChild(b);
+  });
+
+  modal.style.display="flex";
+}
+
+function applyResults(results) {
+  const A=[25,22,20,18,16,15,14,13,12,11];
+  const B=[20,17,15,13,11,10,9,8,7,6];
+  const table=pointsSystem==="A"?A:B;
+
+  results.forEach((r,i)=>{
+    if(!r.dnf){
+      championship[r.name]=(championship[r.name]||0)+(table[i]||0);
+    }
   });
 }
+
+function showResults(results,msg) {
+  let text=`${msg}\n\n🏁 Results:\n`;
+  results.forEach((r,i)=>{
+    text+=r.dnf
+      ?`${i+1}. ${r.name} — DNF (${r.reason})\n`
+      :`${i+1}. ${r.name}\n`;
+  });
+  text+=`\n📰 Headline: ${rand(headlines)}`;
+
+  document.getElementById("raceText").textContent=text;
+  document.getElementById("penaltyOptions").innerHTML="";
+  document.getElementById("raceModal").style.display="flex";
+  setTimeout(()=>document.getElementById("raceModal").style.display="none",8000);
+}
+
+function rand(a){return a[Math.floor(Math.random()*a.length)];}
