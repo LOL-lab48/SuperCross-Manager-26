@@ -1,18 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>SuperCross Manager 26</title>
-</head>
-<body>
+<h1>SuperCross Manager 26</h1>
 
-  <h1>SuperCross Manager 26</h1>
+<button onclick="startRace()">🏁 Simulate Race</button>
 
-  <button onclick="startRace()">Simulate Race</button>
+<h2>League Control Panel</h2>
 
-  <div id="output"></div>
+<div id="league-stats">
+  💰 Money: $<span id="money">1000000</span><br>
+  📣 Popularity: <span id="popularity">50</span>%
+</div>
 
-  <script src="src/game.js"></script>
+<button onclick="runAds()">📺 Run Ads ($100k)</button>
+<button onclick="hostEvent()">🎉 Host Special Event ($200k)</button>
+<button onclick="improveSafety()">🦺 Improve Safety ($150k)</button>
+<button onclick="allowDrama()">🔥 Allow More Drama (Free)</button>
 
-</body>
-</html>
+<h2>Race Output</h2>
+<div id="output"></div>
+
+<script src="src/raceSim.js"></script>
+<script src="src/game.js"></script>
+``
