@@ -95,5 +95,3 @@ function generatePenalties(incident, racePositions, ticketRevenue, sponsorRevenu
     optionsDiv.appendChild(btn);
   });
 }
-
-
