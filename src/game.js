@@ -1,4 +1,3 @@
-let raceData = null;
 let money = 1000000;
 let popularity = 50;
 
@@ -8,9 +7,8 @@ function updateStats() {
 }
 
 function startRace() {
-  raceData = simulateRace();
   document.getElementById("output").innerText =
-    "🏁 Race simulated.\nResults hidden.\nPost-race review pending.";
+    "🏁 Race simulated. Results hidden. Steward review pending.";
 }
 
 function runAds() {
@@ -18,10 +16,8 @@ function runAds() {
     money -= 100000;
     popularity += 5;
     document.getElementById("output").innerText =
-      "📺 Ads run. More fans discovered Supercross!";
+      "📺 Ads ran. New fans discovered Supercross!";
     updateStats();
-  } else {
-    alert("Not enough money!");
   }
 }
 
@@ -30,10 +26,8 @@ function hostEvent() {
     money -= 200000;
     popularity += 8;
     document.getElementById("output").innerText =
-      "🎉 Special event hosted. Big fan boost!";
+      "🎉 Special event boosted popularity!";
     updateStats();
-  } else {
-    alert("Not enough money!");
   }
 }
 
@@ -42,18 +36,17 @@ function improveSafety() {
     money -= 150000;
     popularity += 3;
     document.getElementById("output").innerText =
-      "🦺 Safety improved. Riders and families approve.";
+      "🦺 Safety improved. League credibility rises.";
     updateStats();
-  } else {
-    alert("Not enough money!");
   }
 }
 
 function allowDrama() {
   popularity += 2;
   document.getElementById("output").innerText =
-    "🔥 Drama allowed. Social media engagement spikes!";
+    "🔥 Drama allowed. Social media explodes!";
   updateStats();
 }
 
 window.onload = updateStats;
+
