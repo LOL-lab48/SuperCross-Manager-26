@@ -1,34 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>SuperCross Manager 26</title>
-</head>
-<body>
+<h1>SuperCross Manager 26</h1>
 
-  <h1>SuperCross Manager 26</h1>
+<div class="panel">
+  💰 Money: $<span id="money">1000000</span><br>
+  📣 Popularity: <span id="popularity">50</span>%
+</div>
 
+<div class="panel">
+  <h2>League Actions</h2>
   <button onclick="startRace()">🏁 Simulate Race</button>
+  <button onclick="runAds()">📺 Run Ads</button>
+  <button onclick="hostEvent()">🎉 Host Event</button>
+  <button onclick="improveSafety()">🦺 Improve Safety</button>
+  <button onclick="allowDrama()">🔥 Encourage Drama</button>
+  <button onclick="signSponsor()">🤝 Sign Sponsor</button>
+</div>
 
-  <h2>League Control Panel</h2>
+<div class="panel">
+  <h2>League Output</h2>
+  <div id="output">Waiting for decision...</div>
+</div>
 
-  <div id="league-stats">
-    💰 Money: $<span id="money">1000000</span><br>
-    📣 Popularity: <span id="popularity">50</span>%
+<!-- RACE POPUP -->
+<div id="raceModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeRace()">X</span>
+    <h2>Post-Race Review</h2>
+    <div id="raceText"></div>
   </div>
+</div>
 
-  <br>
-
-  <button onclick="runAds()">📺 Run Ads ($100k)</button>
-  <button onclick="hostEvent()">🎉 Host Special Event ($200k)</button>
-  <button onclick="improveSafety()">🦺 Improve Safety ($150k)</button>
-  <button onclick="allowDrama()">🔥 Allow Drama</button>
-
-  <h2>Output</h2>
-  <div id="output"></div>
-
-  <script src="src/raceSim.js"></script>
-  <script src="src/game.js"></script>
-
-</body>
-</html>
+<link rel="stylesheet" href="src/style.css">
+<script src="src/raceSim.js"></script>
+<script src="src/game.js"></script>
