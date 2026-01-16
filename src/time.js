@@ -1,12 +1,13 @@
 // ==========================
-// TIME SYSTEM
+// TIME SYSTEM v3 - AUTO-STOP ON RACE
 // ==========================
 
 let currentDay = 1;
-let nextRaceDay = 7; // first race is day 7
+let nextRaceDay = 7;
+let raceInterval = 7; // races every 7 days
 let timeSkipping = false;
 let skipInterval = null;
-let skipSpeed = 1000; // milliseconds per day (1 second)
+let skipSpeed = 1000; // 1 second per day
 
 document.getElementById("currentDay").textContent = currentDay;
 
@@ -17,14 +18,19 @@ function advanceDay() {
   currentDay++;
   document.getElementById("currentDay").textContent = currentDay;
 
-  // Daily checks
-  dailyLeagueChecks();  // sponsorships, popularity, etc.
-  processDailyMail();   // emails
+  // --------------------------
+  // DAILY ACTIVITIES
+  // --------------------------
+  dailyLeagueChecks();
+  processDailyMail();
 
-  // Check for race day
+  // --------------------------
+  // CHECK FOR RACE DAY
+  // --------------------------
   if (currentDay >= nextRaceDay) {
-    stopTimeSkip();
-    startRace(); // trigger race modal
+    stopTimeSkip();  // ❌ stop skipping automatically for race
+    startRace();     // 🚨 show race modal
+    nextRaceDay = currentDay + raceInterval; // schedule next race
   }
 }
 
@@ -72,6 +78,3 @@ function resetTimeSystem() {
   document.getElementById("currentDay").textContent = currentDay;
   stopTimeSkip();
 }
-
-
-
