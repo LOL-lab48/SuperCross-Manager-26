@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>SuperCross Manager 26</title>
   <link rel="stylesheet" href="src/style.css">
+  <link rel="icon" href="src/BEST_PIC_EVER.png" type="image/png" />
 </head>
 <body>
 
@@ -32,33 +33,57 @@
   <div class="panel stats">
     💰 Money: $<span id="money"></span><br>
     📣 Popularity: <span id="popularity"></span>%<br>
-    🏟 Seats: <span id="seatsFilled"></span>/<span id="maxSeats"></span>
+    🏟 Seats: <span id="seatsFilled"></span>/<span id="maxSeats"></span><br>
+    📅 Day: <span id="currentDay">1</span>
   </div>
 
   <div class="panel actions">
+    <button onclick="startTimeSkip()">⏩ Skip Time</button>
+    <button onclick="openSponsors()">🤝 Sponsors</button>
     <button onclick="startRace()">🏁 Simulate Race</button>
     <button onclick="showStandings()">🏆 Championship Standings</button>
     <button onclick="startNewSeason()">🔄 New Season</button>
   </div>
 
   <div class="panel output">
-    <div id="output">Waiting for race…</div>
+    <div id="output">Waiting for next race…</div>
   </div>
 
 </div>
 
-<!-- RACE CONTROL MODAL -->
+<!-- RACE / EVENT MODAL -->
 <div id="raceModal" class="modal">
   <div class="modal-content">
-    <h2>Race Control</h2>
+    <h2 id="modalTitle">Event</h2>
     <div id="raceText"></div>
     <div id="penaltyOptions"></div>
   </div>
 </div>
 
+<!-- SPONSORS SCREEN -->
+<div id="sponsorPanel" class="modal">
+  <div class="modal-content">
+    <h2>🤝 Sponsors</h2>
+    <div id="activeSponsors"></div>
+    <hr>
+    <h3>Interested Sponsors</h3>
+    <div id="interestedSponsors"></div>
+    <br>
+    <button onclick="closeSponsors()">⬅ Go Back</button>
+  </div>
+</div>
+
 <script src="src/data/riders.js"></script>
 <script src="src/raceSim.js"></script>
+
+<!-- NEW SYSTEM FILES -->
+<script src="src/time.js"></script>
+<script src="src/mail.js"></script>
+<script src="src/sponsors.js"></script>
+<script src="src/league.js"></script>
+
 <script src="src/game.js"></script>
 
 </body>
 </html>
+
