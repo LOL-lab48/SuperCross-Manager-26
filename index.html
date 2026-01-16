@@ -10,7 +10,7 @@
 
 <h1>🏁 SuperCross Manager 26</h1>
 
-<!-- SETUP -->
+<!-- SETUP PANEL -->
 <div class="panel" id="setupPanel">
   <h2>League Setup (Once per Season)</h2>
 
@@ -27,7 +27,7 @@
   <button onclick="finishSetup()">START SEASON</button>
 </div>
 
-<!-- GAME -->
+<!-- GAME PANEL -->
 <div id="gamePanel" style="display:none">
 
   <div class="panel stats">
@@ -39,51 +39,54 @@
 
   <div class="panel actions">
     <button onclick="startTimeSkip()">⏩ Skip Time</button>
-    <button onclick="openSponsors()">🤝 Sponsors</button>
-    <button onclick="startRace()">🏁 Simulate Race</button>
     <button onclick="showStandings()">🏆 Championship Standings</button>
     <button onclick="startNewSeason()">🔄 New Season</button>
+    <button onclick="document.getElementById('sponsorPanel').style.display='flex'">🤝 Sponsors</button>
   </div>
 
   <div class="panel output">
-    <div id="output">Waiting for next race…</div>
+    <div id="output">Waiting for race…</div>
   </div>
-
 </div>
 
-<!-- RACE / EVENT MODAL -->
+<!-- RACE MODAL -->
 <div id="raceModal" class="modal">
   <div class="modal-content">
-    <h2 id="modalTitle">Event</h2>
+    <h2 id="modalTitle">Race Control</h2>
     <div id="raceText"></div>
     <div id="penaltyOptions"></div>
   </div>
 </div>
 
-<!-- SPONSORS SCREEN -->
+<!-- MAIL MODAL -->
+<div id="mailPanel" class="modal">
+  <div class="modal-content">
+    <h2 id="mailTitle">Mail</h2>
+    <div id="mailBody"></div>
+    <div id="mailOptions"></div>
+    <button onclick="document.getElementById('mailPanel').style.display='none'">Close</button>
+  </div>
+</div>
+
+<!-- SPONSOR MODAL -->
 <div id="sponsorPanel" class="modal">
   <div class="modal-content">
-    <h2>🤝 Sponsors</h2>
+    <h2>Sponsors</h2>
     <div id="activeSponsors"></div>
-    <hr>
-    <h3>Interested Sponsors</h3>
     <div id="interestedSponsors"></div>
-    <br>
-    <button onclick="closeSponsors()">⬅ Go Back</button>
+    <button onclick="closeSponsors()">Go Back</button>
   </div>
 </div>
 
 <script src="src/data/riders.js"></script>
 <script src="src/raceSim.js"></script>
-
-<!-- NEW SYSTEM FILES -->
+<script src="src/game.js"></script>
 <script src="src/time.js"></script>
 <script src="src/mail.js"></script>
 <script src="src/sponsors.js"></script>
 <script src="src/league.js"></script>
 
-<script src="src/game.js"></script>
-
 </body>
 </html>
+
 
