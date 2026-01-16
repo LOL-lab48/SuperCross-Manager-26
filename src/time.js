@@ -1,42 +1,32 @@
-// ==========================
-// TIME SYSTEM - FULL
-// ==========================
-
 let currentDay = 1;
 let nextRaceDay = 7;
-let raceInterval = 7; // races every 7 days
+let raceInterval = 7; 
 let timeSkipping = false;
 let skipInterval = null;
-let skipSpeed = 2000; // ✅ 1 day every 2 seconds
+let skipSpeed = 2000; // 2 seconds per day
 
-// Show initial day
 document.getElementById("currentDay").textContent = currentDay;
 
-// ==========================
+// -------------------------
 // ADVANCE ONE DAY
-// ==========================
+// -------------------------
 function advanceDay() {
   currentDay++;
   document.getElementById("currentDay").textContent = currentDay;
 
-  // --------------------------
-  // DAILY ACTIVITIES
-  // --------------------------
-  dailyLeagueChecks();    // sponsorship checks, popularity, etc.
-  processDailyMail();     // fan mail and sponsor mail
+  dailyLeagueChecks();
+  processDailyMail();
 
-  // --------------------------
-  // CHECK FOR RACE DAY
-  // --------------------------
+  // ✅ Race day
   if (currentDay === nextRaceDay) {
-    stopTimeSkip();      // stop skipping for the race
-    showRaceDayModal();  // show race modal
+    stopTimeSkip(false);      // stop skipping but don't remove click listener
+    showRaceDayModal();       // show modal
   }
 }
 
-// ==========================
+// -------------------------
 // START TIME SKIP
-// ==========================
+// -------------------------
 function startTimeSkip() {
   if (timeSkipping) return;
   timeSkipping = true;
@@ -44,34 +34,34 @@ function startTimeSkip() {
   skipInterval = setInterval(() => {
     advanceDay();
   }, skipSpeed);
-
-  // stop if player clicks anywhere
-  document.body.addEventListener("click", stopTimeSkipOnClick);
 }
 
-// ==========================
+// -------------------------
 // STOP TIME SKIP
-// ==========================
-function stopTimeSkip() {
+// -------------------------
+function stopTimeSkip(removeClickListener = true) {
   if (!timeSkipping) return;
   timeSkipping = false;
 
   clearInterval(skipInterval);
   skipInterval = null;
 
-  document.body.removeEventListener("click", stopTimeSkipOnClick);
+  // only remove the listener if we’re stopping manually
+  if (removeClickListener) {
+    document.body.removeEventListener("click", stopTimeSkipOnClick);
+  }
 }
 
-// ==========================
-// CLICK ANYWHERE TO STOP
-// ==========================
+// -------------------------
+// CLICK ANYWHERE
+// -------------------------
 function stopTimeSkipOnClick() {
   stopTimeSkip();
 }
 
-// ==========================
+// -------------------------
 // SHOW RACE MODAL
-// ==========================
+// -------------------------
 function showRaceDayModal() {
   const raceModal = document.getElementById("raceModal");
   const raceText = document.getElementById("raceText");
@@ -84,21 +74,22 @@ function showRaceDayModal() {
   startBtn.textContent = "Start Race";
   startBtn.onclick = () => {
     raceModal.style.display = "none";
-    startRace();               // raceSim.js handles incidents/results
-    nextRaceDay = currentDay + raceInterval; // schedule next race
+    startRace();               // triggers raceSim.js
+    nextRaceDay = currentDay + raceInterval;
   };
   opts.appendChild(startBtn);
 
   raceModal.style.display = "flex";
 }
 
-// ==========================
-// RESET TIME SYSTEM (new season)
-// ==========================
+// -------------------------
+// RESET TIME
+// -------------------------
 function resetTimeSystem() {
   currentDay = 1;
   nextRaceDay = 7;
   document.getElementById("currentDay").textContent = currentDay;
   stopTimeSkip();
 }
+
 
