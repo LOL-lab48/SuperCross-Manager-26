@@ -29,22 +29,27 @@ function startTimeSkip() {
 // STOP SKIP
 function stopTimeSkip() {
   if (!skippingTime) return;
+
   skippingTime = false;
   clearInterval(skipInterval);
   skipInterval = null;
+
   document.getElementById("output").textContent =
     `⏸ Paused on Day ${currentDay}`;
 }
 
-// ADVANCE DAY
+// ADVANCE ONE DAY
 function advanceDay() {
   currentDay++;
   updateDayUI();
 
+  // DAILY SYSTEMS
   dailyLeagueDrift();
   processDailyMail();
   dailySponsorDecay();
+  dailyLeagueChecks();
 
+  // RACE DAY
   if (currentDay >= nextRaceDay) {
     stopTimeSkip();
     showRaceDay();
@@ -72,16 +77,17 @@ function showRaceDay() {
   document.getElementById("raceModal").style.display = "flex";
 }
 
-// CLICK ANYWHERE TO STOP
+// CLICK ANYWHERE TO STOP SKIP
 document.addEventListener("click", e => {
   if (e.target.tagName === "BUTTON") return;
   stopTimeSkip();
 });
 
-// BACKGROUND DRIFT
+// BACKGROUND LEAGUE DRIFT
 function dailyLeagueDrift() {
   if (popularity > 55 && Math.random() < 0.3) popularity--;
   if (popularity < 45 && Math.random() < 0.2) popularity++;
   updateUI();
 }
+
 
