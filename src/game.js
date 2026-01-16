@@ -7,22 +7,20 @@ let pointsSystem = null;
 let setupSpent = {};
 const championship = {};
 
-function updateUI() {
-  money = Math.max(0, money);
-  popularity = Math.min(100, Math.max(0, popularity));
+// FUN SYSTEMS
+let fanPreference = Math.random() < 0.5 ? "strict" : "lenient";
+let stewardSkill = Math.random(); // higher = fewer mistakes
 
+function updateUI() {
+  popularity = Math.max(0, Math.min(100, popularity));
   document.getElementById("money").textContent = money;
   document.getElementById("popularity").textContent = popularity;
   document.getElementById("maxSeats").textContent = maxSeats;
   document.getElementById("seatsFilled").textContent = seatsFilled;
 }
 
-function output(msg) {
-  document.getElementById("output").textContent = msg;
-}
-
 function selectPointsSystem(sys) {
-  if (pointsSystem) return alert("Points system locked for season.");
+  if (pointsSystem) return alert("Points system locked for this season.");
   pointsSystem = sys;
 }
 
@@ -35,7 +33,7 @@ function setupSpend(type) {
 }
 
 function finishSetup() {
-  if (!pointsSystem) return alert("Choose points system!");
+  if (!pointsSystem) return alert("Choose a points system.");
   document.getElementById("setupPanel").style.display = "none";
   document.getElementById("gamePanel").style.display = "block";
   updateUI();
@@ -49,13 +47,16 @@ function showStandings() {
 }
 
 function startNewSeason() {
-  if (!confirm("Start new season?")) return;
+  if (!confirm("Start a new season?")) return;
   for (let d in championship) championship[d] = 0;
   pointsSystem = null;
   setupSpent = {};
-  document.getElementById("gamePanel").style.display="none";
-  document.getElementById("setupPanel").style.display="block";
+  fanPreference = Math.random() < 0.5 ? "strict" : "lenient";
+  stewardSkill = Math.random();
+  document.getElementById("gamePanel").style.display = "none";
+  document.getElementById("setupPanel").style.display = "block";
 }
+
 
 
 
