@@ -1,10 +1,9 @@
 // ==========================
-// TIME SYSTEM (MANUAL SKIP)
+// TIME SYSTEM (F1 MANAGER–STYLE)
 // ==========================
 
-// CORE TIME STATE
 let currentDay = 1;
-let nextRaceDay = 7;     // 1 race every 7 days (easy to change)
+let nextRaceDay = 7;
 let skippingTime = false;
 let skipInterval = null;
 
@@ -14,53 +13,49 @@ function updateDayUI() {
   if (el) el.textContent = currentDay;
 }
 
-// START SKIPPING TIME
+// START SKIP
 function startTimeSkip() {
   if (skippingTime) return;
 
   skippingTime = true;
-  document.getElementById("output").textContent = "⏩ Skipping time... (click anywhere to stop)";
+  document.getElementById("output").textContent =
+    "⏩ Skipping time... (click anywhere to stop)";
 
   skipInterval = setInterval(() => {
     advanceDay();
-  }, 300); // speed of skipping (ms per day)
+  }, 300);
 }
 
-// STOP SKIPPING TIME (CLICK ANYWHERE)
+// STOP SKIP
 function stopTimeSkip() {
   if (!skippingTime) return;
-
   skippingTime = false;
   clearInterval(skipInterval);
   skipInterval = null;
-
   document.getElementById("output").textContent =
     `⏸ Paused on Day ${currentDay}`;
 }
 
-// ADVANCE ONE DAY
+// ADVANCE DAY
 function advanceDay() {
   currentDay++;
   updateDayUI();
 
-  // DAILY DRIFT (SMALL, LEAGUE-WIDE EFFECTS)
   dailyLeagueDrift();
-
-  // DAILY MAIL / EVENTS
   processDailyMail();
+  dailySponsorDecay();
 
-  // RACE DAY CHECK
   if (currentDay >= nextRaceDay) {
     stopTimeSkip();
     showRaceDay();
   }
 }
 
-// SHOW RACE DAY PROMPT
+// RACE DAY PROMPT
 function showRaceDay() {
   document.getElementById("modalTitle").textContent = "🏁 Race Weekend";
   document.getElementById("raceText").textContent =
-    `Day ${currentDay}\n\nIt's race day.\nClick below to run the race.`;
+    `Day ${currentDay}\n\nIt's race day.`;
 
   const opts = document.getElementById("penaltyOptions");
   opts.innerHTML = "";
@@ -70,33 +65,23 @@ function showRaceDay() {
   b.onclick = () => {
     document.getElementById("raceModal").style.display = "none";
     startRace();
-    scheduleNextRace();
+    nextRaceDay = currentDay + 7;
   };
-  opts.appendChild(b);
 
+  opts.appendChild(b);
   document.getElementById("raceModal").style.display = "flex";
 }
 
-// SCHEDULE NEXT RACE
-function scheduleNextRace() {
-  nextRaceDay = currentDay + 7;
-}
-
-// CLICK ANYWHERE TO STOP SKIP
-document.addEventListener("click", (e) => {
-  // ignore button clicks (they already do stuff)
+// CLICK ANYWHERE TO STOP
+document.addEventListener("click", e => {
   if (e.target.tagName === "BUTTON") return;
   stopTimeSkip();
 });
 
-// ==========================
-// DAILY BACKGROUND EFFECTS
-// ==========================
-
+// BACKGROUND DRIFT
 function dailyLeagueDrift() {
-  // popularity slowly normalizes
-  if (popularity > 50 && Math.random() < 0.3) popularity--;
-  if (popularity < 50 && Math.random() < 0.2) popularity++;
-
+  if (popularity > 55 && Math.random() < 0.3) popularity--;
+  if (popularity < 45 && Math.random() < 0.2) popularity++;
   updateUI();
 }
+
