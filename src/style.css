@@ -1,5 +1,5 @@
 body {
-  background:#111;
+  background:#0f0f0f;
   color:#eee;
   font-family: Arial, sans-serif;
   text-align:center;
@@ -8,18 +8,18 @@ body {
 h1 { color:#ffcc00; }
 
 .panel {
+  background:#1b1b1b;
   border:2px solid #333;
   padding:15px;
   margin:10px auto;
-  width:80%;
-  background:#1b1b1b;
+  width:85%;
 }
 
 button {
-  margin:5px;
-  padding:10px 15px;
   background:#ffcc00;
   border:none;
+  padding:10px 15px;
+  margin:5px;
   cursor:pointer;
   font-weight:bold;
 }
@@ -30,7 +30,7 @@ button:hover { background:#ffaa00; }
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.8);
+  background:rgba(0,0,0,0.85);
   align-items:center;
   justify-content:center;
 }
@@ -38,10 +38,11 @@ button:hover { background:#ffaa00; }
 .modal-content {
   background:#222;
   padding:20px;
-  width:80%;
+  width:85%;
   border:2px solid #ffcc00;
   white-space:pre-line;
 }
+
 
 
 
