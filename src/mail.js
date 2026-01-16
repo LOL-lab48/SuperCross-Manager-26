@@ -1,122 +1,70 @@
 // ==========================
-// MAIL & EVENT SYSTEM
+// MAIL SYSTEM
 // ==========================
 
-// ALL ACTIVE MAIL
 let mailQueue = [];
+let readMail = [];
 
-// MEMORY / ESCALATION TRACKING
-let ignoredMailCount = 0;
-let controversyLevel = 0; // feeds governing body later
-
-// ==========================
-// DAILY MAIL PROCESS
-// ==========================
-
+// PROCESS DAILY MAIL
 function processDailyMail() {
-  // Chance for random fan / media mail
-  if (Math.random() < 0.25) generateFanMail();
-  if (Math.random() < 0.15) generateMediaMail();
+  // Chance of new fan email
+  if (Math.random() < 0.3) generateFanMail();
 
-  // Sponsor interest increases with popularity
-  if (Math.random() < popularity / 500) generateSponsorOffer();
+  // Chance of sponsor email handled in sponsors.js
+  // (addInterestedSponsor() fires elsewhere)
 
-  // Escalation if ignoring too much
-  if (ignoredMailCount >= 3 && Math.random() < 0.3) {
-    generateEscalationMail();
-    ignoredMailCount = 0;
-  }
-
-  // Show first mail immediately (pauses time)
-  if (mailQueue.length > 0) {
-    stopTimeSkip();
-    showMail(mailQueue.shift());
+  // Show first email if inbox empty
+  if (mailQueue.length > 0 && !document.getElementById("mailPanel").style.display.includes("flex")) {
+    showMail(mailQueue[0]);
   }
 }
 
-// ==========================
-// MAIL GENERATORS
-// ==========================
-
+// GENERATE FAN EMAIL
 function generateFanMail() {
-  const angry = popularity < 40;
+  const emotions = ["angry", "confused", "happy"];
+  const emotion = emotions[Math.floor(Math.random() * emotions.length)];
+  const text = {
+    angry: "I'm upset with the way the league handled the last race!",
+    confused: "I don't understand some of the rules...",
+    happy: "Great races lately, keep it up!"
+  };
+
   mailQueue.push({
-    title: "📣 Fan Feedback",
-    body: angry
-      ? "Fans are angry about how the league is being run."
-      : "Fans are discussing recent races and decisions.",
+    title: `Fan Mail (${emotion})`,
+    body: text[emotion],
     responses: [
-      { text: "Ignore", effect: () => ignoreMail() },
-      { text: "Issue statement", effect: () => { popularity += 2; money -= 50000; } }
+      { text: "Reply Politely", effect: () => popularity += 2 },
+      { text: "Ignore", effect: () => popularity -= 1 }
     ]
   });
 }
 
-function generateMediaMail() {
-  mailQueue.push({
-    title: "📰 Media Inquiry",
-    body: "Media outlets are questioning recent officiating and safety standards.",
-    responses: [
-      { text: "No comment", effect: () => ignoreMail() },
-      { text: "Defend decisions", effect: () => { popularity += 1; controversyLevel++; } },
-      { text: "Admit mistakes", effect: () => { popularity -= 1; controversyLevel--; } }
-    ]
-  });
-}
-
-function generateSponsorOffer() {
-  if (typeof sponsorsInterested === "undefined") return;
-
-  addInterestedSponsor();
-}
-
-function generateEscalationMail() {
-  mailQueue.push({
-    title: "⚠️ Situation Escalating",
-    body:
-      "Unanswered concerns are starting to stack up.\n" +
-      "Sponsors and media are losing patience.",
-    responses: [
-      { text: "Take action now", effect: () => { popularity += 3; money -= 100000; } },
-      { text: "Ignore", effect: () => ignoreMail() }
-    ]
-  });
-}
-
-// ==========================
-// MAIL UI
-// ==========================
-
+// SHOW MAIL UI
 function showMail(mail) {
-  document.getElementById("modalTitle").textContent = mail.title;
-  document.getElementById("raceText").textContent = mail.body;
+  const panel = document.getElementById("mailPanel");
+  panel.style.display = "flex";
+  document.getElementById("mailTitle").textContent = mail.title;
+  document.getElementById("mailBody").textContent = mail.body;
 
-  const opts = document.getElementById("penaltyOptions");
+  const opts = document.getElementById("mailOptions");
   opts.innerHTML = "";
 
-  mail.responses.forEach(r => {
+  mail.responses.forEach((r, i) => {
     const b = document.createElement("button");
     b.textContent = r.text;
     b.onclick = () => {
       r.effect();
-      closeMail();
+      readMail.push(mail);
+      mailQueue.shift();
+      panel.style.display = "none";
     };
     opts.appendChild(b);
   });
-
-  document.getElementById("raceModal").style.display = "flex";
 }
 
-function closeMail() {
-  updateUI();
-  document.getElementById("raceModal").style.display = "none";
-}
-
-// ==========================
-// IGNORE LOGIC
-// ==========================
-
+// IGNORE MAIL (for sponsors etc.)
 function ignoreMail() {
-  ignoredMailCount++;
-  controversyLevel++;
+  if (mailQueue.length === 0) return;
+  mailQueue.shift();
 }
+
