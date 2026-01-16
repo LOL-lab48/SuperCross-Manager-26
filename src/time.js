@@ -1,5 +1,5 @@
 // ==========================
-// TIME SYSTEM v3 - AUTO-STOP ON RACE
+// TIME SYSTEM - FULL
 // ==========================
 
 let currentDay = 1;
@@ -7,8 +7,9 @@ let nextRaceDay = 7;
 let raceInterval = 7; // races every 7 days
 let timeSkipping = false;
 let skipInterval = null;
-let skipSpeed = 1000; // 1 second per day
+let skipSpeed = 2000; // ✅ 1 day every 2 seconds
 
+// Show initial day
 document.getElementById("currentDay").textContent = currentDay;
 
 // ==========================
@@ -21,16 +22,15 @@ function advanceDay() {
   // --------------------------
   // DAILY ACTIVITIES
   // --------------------------
-  dailyLeagueChecks();
-  processDailyMail();
+  dailyLeagueChecks();    // sponsorship checks, popularity, etc.
+  processDailyMail();     // fan mail and sponsor mail
 
   // --------------------------
   // CHECK FOR RACE DAY
   // --------------------------
-  if (currentDay >= nextRaceDay) {
-    stopTimeSkip();  // ❌ stop skipping automatically for race
-    startRace();     // 🚨 show race modal
-    nextRaceDay = currentDay + raceInterval; // schedule next race
+  if (currentDay === nextRaceDay) {
+    stopTimeSkip();      // stop skipping for the race
+    showRaceDayModal();  // show race modal
   }
 }
 
@@ -45,7 +45,7 @@ function startTimeSkip() {
     advanceDay();
   }, skipSpeed);
 
-  // Stop skipping if player clicks anywhere
+  // stop if player clicks anywhere
   document.body.addEventListener("click", stopTimeSkipOnClick);
 }
 
@@ -63,10 +63,33 @@ function stopTimeSkip() {
 }
 
 // ==========================
-// HELPER: stop on click
+// CLICK ANYWHERE TO STOP
 // ==========================
 function stopTimeSkipOnClick() {
   stopTimeSkip();
+}
+
+// ==========================
+// SHOW RACE MODAL
+// ==========================
+function showRaceDayModal() {
+  const raceModal = document.getElementById("raceModal");
+  const raceText = document.getElementById("raceText");
+  const opts = document.getElementById("penaltyOptions");
+
+  raceText.textContent = `🏁 Race Day! Day ${currentDay}\nClick below to run the race.`;
+  opts.innerHTML = "";
+
+  const startBtn = document.createElement("button");
+  startBtn.textContent = "Start Race";
+  startBtn.onclick = () => {
+    raceModal.style.display = "none";
+    startRace();               // raceSim.js handles incidents/results
+    nextRaceDay = currentDay + raceInterval; // schedule next race
+  };
+  opts.appendChild(startBtn);
+
+  raceModal.style.display = "flex";
 }
 
 // ==========================
@@ -78,3 +101,4 @@ function resetTimeSystem() {
   document.getElementById("currentDay").textContent = currentDay;
   stopTimeSkip();
 }
+
