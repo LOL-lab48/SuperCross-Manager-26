@@ -11,13 +11,13 @@
 
 <!-- SETUP -->
 <div class="panel" id="setupPanel">
-  <h2>League Setup</h2>
+  <h2>League Setup (Once per Season)</h2>
 
-  <p><b>Choose Points System (Locked for Season)</b></p>
-  <button onclick="selectPointsSystem('A')">System A (25-22-20)</button>
-  <button onclick="selectPointsSystem('B')">System B (20-17-15)</button>
+  <p><b>Points System</b></p>
+  <button onclick="selectPointsSystem('A')">System A (25–22–20)</button>
+  <button onclick="selectPointsSystem('B')">System B (20–17–15)</button>
 
-  <p><b>Pre-Season Investment</b></p>
+  <p><b>Pre-Season Investments</b></p>
   <button onclick="setupSpend('marketing')">Marketing ($300k)</button>
   <button onclick="setupSpend('safety')">Safety ($300k)</button>
   <button onclick="setupSpend('media')">Media ($300k)</button>
@@ -42,12 +42,12 @@
   </div>
 
   <div class="panel output">
-    <div id="output">Waiting for race...</div>
+    <div id="output">Waiting for race…</div>
   </div>
 
 </div>
 
-<!-- MODAL -->
+<!-- RACE CONTROL MODAL -->
 <div id="raceModal" class="modal">
   <div class="modal-content">
     <h2>Race Control</h2>
@@ -62,7 +62,3 @@
 
 </body>
 </html>
-
-
-
-
